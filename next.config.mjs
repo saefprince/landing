@@ -3,7 +3,8 @@ import svgr from 'next-plugin-svgr';
 import withPlugins from 'next-compose-plugins';
 import images from 'next-images';
 import { globby } from 'globby';
-import { relative, join } from 'path';
+import { join, relative } from 'path';
+import { withNextBanner } from 'next-banner';
 
 export const defaultLocale = 'en';
 
@@ -31,7 +32,7 @@ export const nextConfig = {
                     {
                         key: 'Cache-Control',
                         value: 'public, max-age=7200, must-revalidate',
-                    }
+                    },
                 ],
             },
             {
@@ -41,10 +42,10 @@ export const nextConfig = {
                     {
                         key: 'Cache-Control',
                         value: 'max-age=31536000, public, stale-while-revalidate',
-                    }
+                    },
                 ],
             },
-        ]
+        ];
     },
     async redirects() {
         // Redirects public files that were accidentally prefixed with a locale.
@@ -65,4 +66,18 @@ export const nextConfig = {
     },
 };
 
-export default withPlugins([svgr, [images, { fileExtensions: ['jpg', 'jpeg', 'png', 'gif'] }]], nextConfig);
+export default withPlugins(
+    [
+        [
+            withNextBanner,
+            {
+                nextBanner: {
+                    domain: 'https://plutonium.pw',
+                },
+            },
+        ],
+        svgr,
+        [images, { fileExtensions: ['jpg', 'jpeg', 'png', 'gif'] }],
+    ],
+    nextConfig
+);
